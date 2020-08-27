@@ -5,7 +5,7 @@ import finnhub
 import pandas as pd
 
 # Setup client
-finnhub_client = finnhub.Client(api_key="bsuto6n48v6qu589ijp0")
+finnhub_client = finnhub.Client(api_key="MYAPIKEY")
 
 ticker = input("Please enter the ticker of the stock you want to check: ")
 res = finnhub_client.stock_candles(ticker.upper(), 'D', 1595557674, int(time.time())) #comparing july 23 to now
