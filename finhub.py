@@ -12,7 +12,7 @@ from matplotlib.figure import Figure
 
 
 # Setup client
-finnhub_client = finnhub.Client(api_key="bsuto6n48v6qu589ijp0")
+finnhub_client = finnhub.Client(api_key="APIKEY")
 
 ticker = input("Please enter the ticker of the stock you want to check: ")
 today = int(time.time())
