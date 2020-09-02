@@ -10,16 +10,19 @@ import base64
 from io import BytesIO
 from matplotlib.figure import Figure
 
-
 # Setup client
-finnhub_client = finnhub.Client(api_key="APIKEY")
-
+finnhub_client = finnhub.Client(api_key="bsuto6n48v6qu589ijp0")
+print('''hello 'my' "dog" ''')
 ticker = input("Please enter the ticker of the stock you want to check: ")
 today = int(time.time())
 one_month = 2678400
 res = finnhub_client.stock_candles(ticker.upper(), 'D', today - one_month, today)
-
-
+compare = finnhub_client.stock_candles(ticker.upper(), 'D', today - one_month - 345600, today - one_month + 345600)
+rf_comp = {}
+rf_comp['Date'] = []
+if compare["s"] != "no_data":
+    for num in range(0, len(compare["c"])):
+        rf_comp['Date'].append(datetime.datetime.fromtimestamp(compare["t"][num] + 28800).strftime('%Y-%m-%d'))
 rf = {}
 rf['Date'] = []
 rf['Open'] = []
@@ -30,16 +33,19 @@ rf['Volume'] = []
 if res["s"] != "no_data":
     for num in range(0, len(res["c"])):
         rf['Date'].append(datetime.datetime.fromtimestamp(res["t"][num] + 28800).strftime('%Y-%m-%d'))
+        #rf['Date'].dt.date
+        #rf['Date']= pd.to_datetime(rf['Date']) 
         rf['Open'].append(res["o"][num])
         rf['High'].append(res["h"][num])
         rf['Low'].append(res["l"][num])
         rf['Close'].append(res["c"][num])
         rf['Volume'].append(res["v"][num])
     pda = pd.DataFrame.from_dict(rf)
-    pda.index = pd.date_range(start=rf['Date'][0], end=rf['Date'][len(rf['Date'])-1], freq='B') # use pandas to create a date range and set index
-    pda['date'] = pd.date_range(start=rf['Date'][0], end=rf['Date'][len(rf['Date'])-1], freq='B') # also set as column values
-    #pda.index.name = 'Date'
-    #pda.set_index('Date', inplace=True)
+    pda['Date'] = pda['Date'].astype('datetime64[ns]')
+    #pda.index = pd.date_range(start=rf['Date'][0], end=rf['Date'][len(rf['Date'])-1], freq='B') # use pandas to create a date range and set index
+    #pda['date'] = pd.date_range(start=rf['Date'][0], end=rf['Date'][len(rf['Date'])-1], freq='B') # also set as column values
+    pda.index.name = 'Date'
+    pda.set_index('Date', inplace=True)
     pda.shape
     pda.head(3)
     pda.tail(3)
@@ -58,13 +64,19 @@ if res["s"] != "no_data":
         green_candle = False
         downtrend_arr = []
         downtrend = False
+        appender = []
+        if len(appender) == 0:
+            for num in range(0, len(compare["c"])):
+                if compare["t"][num] == res["t"][0]:
+                    appender.append(compare["c"][num-1])
         for num in range(0, len(res["c"])):
             close_price = res["c"][num]
             open_price = res["o"][num]
             current_date = datetime.datetime.fromtimestamp(res["t"][num] + 28800).strftime('%m/%d/%Y')
             if num == 0:
-                prev_price = close_price
+                prev_price = appender[0]
             if len(downtrend_arr) < 3:
+                print(prev_price)
                 downtrend_arr.append(close_price-prev_price)
             if open_price < close_price:
                 green_candle = True
