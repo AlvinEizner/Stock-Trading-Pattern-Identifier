@@ -12,6 +12,11 @@ from matplotlib.figure import Figure
 
 # Setup client
 finnhub_client = finnhub.Client(api_key="MYAPIKEY")
+
+####################################################################################################################
+#Takes user input for stock symbol, stores stock data, and produces a graph displaying the data over the past month#
+####################################################################################################################
+
 ticker = input("Please enter the ticker of the stock you want to check: ")
 today = int(time.time())
 one_month = 2678400
@@ -56,9 +61,11 @@ if res["s"] != "no_data":
     #data = base64.b64encode(buf.getbuffer()).decode("ascii")
 
 
-    result_arr = []
-
-    def check_ws():
+    #result_arr = []
+#########################################
+#Functions that Check for Patterns Below#
+#########################################
+    def check_ws(): #Checks for 3 White Soliders Patttern
         ws_count = 0
         green_candle = False
         downtrend_arr = []
@@ -109,7 +116,7 @@ if res["s"] != "no_data":
                 ws_count = 0
             prev_price = close_price
 
-    def check_bc():
+    def check_bc(): #Checks for 3 Black Crows Patttern
         bc_count = 0
         red_candle = False
         uptrend_arr = []
@@ -131,7 +138,7 @@ if res["s"] != "no_data":
                 red_candle = False
             if close_price <= prev_price and red_candle == True and uptrend == True:
                 bc_count += 1 
-            elif close_price > prev_price and num != 0 and uptrend == True:#double check this
+            elif close_price > prev_price and num != 0 and uptrend == True:
                 for num in range(bc_count):
                     uptrend_arr.pop(0)
                 bc_count = 0
@@ -153,7 +160,7 @@ if res["s"] != "no_data":
                 bc_count = 0
             prev_price = close_price
 
-    def check_bearish_engulfing():
+    def check_bearish_engulfing(): #Checks for a Bearish Englufing Pattern
         uptrend_arr = []
         engulf_arr = []
         uptrend = False
@@ -194,7 +201,7 @@ if res["s"] != "no_data":
                 del engulf_arr[:]
             prev_price = close_price
 
-    def check_bullish_engulfing():
+    def check_bullish_engulfing(): # Checks for a Bullish Englulfing Candle
         downtrend_arr = []
         engulf_arr = []
         downtrend = False
@@ -235,7 +242,7 @@ if res["s"] != "no_data":
                 del engulf_arr[:]
             prev_price = close_price
 
-    def check_shstar():
+    def check_shstar(): #Checks for the Shooting Star Pattern
         uptrend_arr = []
         uptrend = False
         wick = 0
