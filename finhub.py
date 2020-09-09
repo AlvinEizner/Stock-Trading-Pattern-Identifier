@@ -51,7 +51,7 @@ if res["s"] != "no_data":
     buf = BytesIO()
     mpf.plot(pda, type='candle', style='charles', title=ticker.upper())
 
-#comment out top and uncomment below to display image on web
+#comment out uptop and uncomment below to display image on web
     #fig = mpf.plot(pda, type='candle', style='charles', title=ticker.upper(), savefig=buf)
     #data = base64.b64encode(buf.getbuffer()).decode("ascii")
 
@@ -272,9 +272,12 @@ if res["s"] != "no_data":
 
 
     #test()
+def main():
     check_ws()
     check_bc()
     check_bearish_engulfing()
     check_bullish_engulfing()
     check_shstar()
-    result = ", ".join(result_arr)
+    #result = ", ".join(result_arr)
+if __name__ == '__main__':
+    main()
