@@ -13,9 +13,9 @@ from matplotlib.figure import Figure
 # Setup client
 finnhub_client = finnhub.Client(api_key="MYAPIKEY")
 
-####################################################################################################################
-#Takes user input for stock symbol, stores stock data, and produces a graph displaying the data over the past month#
-####################################################################################################################
+######################################################################################################################
+# Takes user input for stock symbol, stores stock data, and produces a graph displaying the data over the past month #
+######################################################################################################################
 
 ticker = input("Please enter the ticker of the stock you want to check: ")
 today = int(time.time())
@@ -55,16 +55,17 @@ if res["s"] != "no_data":
     pda.tail(3)
     buf = BytesIO()
     mpf.plot(pda, type='candle', style='charles', title=ticker.upper())
+    result_arr = []
 
 #comment out uptop and uncomment below to display image on web
     #fig = mpf.plot(pda, type='candle', style='charles', title=ticker.upper(), savefig=buf)
     #data = base64.b64encode(buf.getbuffer()).decode("ascii")
 
 
-    #result_arr = []
-#########################################
-#Functions that Check for Patterns Below#
-#########################################
+###########################################
+# Functions that Check for Patterns Below #
+###########################################
+
     def check_ws(): #Checks for 3 White Soliders Patttern
         ws_count = 0
         green_candle = False
